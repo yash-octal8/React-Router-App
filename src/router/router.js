@@ -6,6 +6,8 @@ import Services from '../Pages/Services';
 import Contact from '../Pages/Contact';
 import { createBrowserRouter } from 'react-router-dom';
 import App from '../App';
+import Login from '../Pages/Login';
+import Dashboard from '../Pages/Dashboard';
 
 const router = createBrowserRouter([
   {
@@ -34,6 +36,16 @@ const router = createBrowserRouter([
         },
     ]
   },
+  {
+      path: "/login",
+      element: <Login/>,
+  },
+
+  {
+    path: "/dashboard",
+    element: <Dashboard/>,
+  },
+
 ]);
 
 export default router;
