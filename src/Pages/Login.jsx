@@ -1,35 +1,45 @@
 import React, { useState } from 'react'
 import octal from '../image/octal.png'
+import axios from 'axios'
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+const notify = () => toast("User login successfully!");
+
 
 const Login = () => {
 
-    const [form, setForm] = useState({
-        email : "",
-        password : "",
-    });
+   const [email, setEmail] = useState("");
+   const [password, setPassword] = useState("");
 
-    console.log(form);
     const handleFormData = (e) => {
-
-        const {name, value} = e.target;
-
-
-        setForm((prev) => {
-
-            return { 
-                ...prev, 
-                [name] : value ,
-            };
-        });
+        setEmail(e.target.value);
+    }
+    const handleFormData1 = (e) => {
+        setPassword(e.target.value);
     }
 
-    const handleDataSubmit = () => {
+    const handleDataSubmit = (e) => {
+        e.preventDefault();
 
+        const formData = {
+            email: email,
+            password: password
+        };
+        axios.post('https://React-App-Backend.test/api/login', formData).then((res) => {
+            localStorage.setItem('token', JSON.stringify(res.data));
+            console.log(res,11);
+            notify();
+        }).
+        catch((error)=>{
+            const notify1 = () => toast(error?.response?.data?.error);
+            notify1();
+        })
     }
 
   return (
     <div>
-        <section className="bg-gray-50 dark:bg-gray-900">
+        <section className="bg-gray-50 dark:bg-gray-900"> 
+            <ToastContainer />
             <div className="flex flex-col items-center justify-center px-6 py-8 mx-auto md:h-screen lg:py-0">
                 <a href="#" className="flex items-center mb-6 text-2xl font-semibold text-gray-900 dark:text-white">
                     <img className="w-14 h-14 mr-2" src={octal} alt="logo" />
@@ -43,12 +53,12 @@ const Login = () => {
                         <form className="space-y-4 md:space-y-6" action="#">
                             <div>
                                 <label htmlFor="email" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Your email</label>
-                                <input type="email" value={form.email} name="email" id="email" onChange={handleFormData}
+                                <input type="email" value={email} name="email" id="email" onChange={handleFormData}
                                 className="bg-gray-50 border border-gray-300 text-gray-900 rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="name@company.com" required="" />
                             </div>
                             <div>
                                 <label htmlFor="password" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Password</label>
-                                <input type="password" value={form.password} name="password" id="password" onChange={handleFormData}
+                                <input type="password" value={password} name="password" id="password" onChange={handleFormData1}
                                     placeholder="••••••••" className="bg-gray-50 border border-gray-300 text-gray-900 rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" required="" />
                             </div>
                             {/* <div className="flex items-center justify-between">
